@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StoreHouseManageMapper">
+    <insert id="addNumber">
+        insert into store_house_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="number != null and number != ''">NUMBER,
+            </if>
+            <if test="name != null and name != ''">NAME,
+            </if>
+            <if test="size != null and size != ''">SIZE,
+            </if>
+            <if test="costPrice != null and costPrice != ''">COST_PRICE,
+            </if>
+            <if test="nowPrice != null and nowPrice != ''">NOW_PRICE,
+            </if>
+            <if test="price != null and price != ''">PRICE,
+            </if>
+            <if test="type != null and type != ''">TYPE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="number != null and number != ''">#{number},
+            </if>
+            <if test="name != null and name != ''">#{name},
+            </if>
+            <if test="size != null and size != ''">#{size},
+            </if>
+            <if test="costPrice != null and costPrice != ''">#{costPrice},
+            </if>
+            <if test="nowPrice != null and nowPrice != ''">#{nowPrice},
+            </if>
+            <if test="price != null and price != ''">#{price},
+            </if>
+            <if test="type != null and type != ''">#{type},
+            </if>
+        </trim>
+
+    </insert>
+    <update id="updateNumber">
+
+        update store_house_manage
+        <set>
+            <if test="number!= null and number!= ''">NUMBER = #{number},
+            </if>
+            <if test="name!= null and name!= ''">NAME = #{name},
+            </if>
+            <if test="size!= null and size!= ''">SIZE = #{size},
+            </if>
+            <if test="costPrice!= null and costPrice!= ''">COST_PRICE = #{costPrice},
+            </if>
+            <if test="nowPrice!= null and nowPrice!= ''">NOW_PRICE = #{nowPrice},
+            </if>
+            <if test="price!= null and price!= ''">PRICE = #{price},
+            </if>
+            <if test="type!= null and type!= ''">TYPE = #{type},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="removeById" parameterType="integer">
+        delete from store_house_manage where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+    <select id="selectList" resultType="com.ruoyi.system.domain.StoreHouseManage">
+        select id, number, name, size,COST_PRICE costPrice,NOW_PRICE nowPrice,PRICE price,TYPE type,
+        (NOW_PRICE - COST_PRICE) AS winAndLose
+               from  store_house_manage
+        <where>
+        <if test="number != null and number != ''">
+            AND NUMBER like concat('%', #{number}, '%')
+        </if>
+        <if test="name != null and name != ''">
+            AND NAME like concat('%', #{name}, '%')
+        </if>
+        <if test="size != null and size != ''">
+            AND SIZE = #{size}
+        </if>
+        <if test="type != null and type != ''">
+            AND TYPE = #{type}
+        </if>
+        </where>
+    </select>
+    <select id="selectById" resultType="com.ruoyi.system.domain.StoreHouseManage">
+        select id, number, name, size,COST_PRICE costPrice,NOW_PRICE nowPrice,PRICE price,TYPE type
+               from  store_house_manage
+        where id = #{id}
+    </select>
+    <select id="selectByNumber" resultType="com.ruoyi.system.domain.StoreHouseManage">
+        select id, number, name, size,COST_PRICE costPrice,NOW_PRICE nowPrice,PRICE price,TYPE type
+        from  store_house_manage
+        where number = #{number}
+    </select>
+</mapper>
