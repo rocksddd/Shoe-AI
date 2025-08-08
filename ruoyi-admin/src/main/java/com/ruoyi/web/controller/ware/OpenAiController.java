@@ -87,14 +87,18 @@ public class OpenAiController {
     }
 
 
-        /**
+    /**
      * SSE 流式响应接口
-     * 访问地址：http://localhost:8080/stream
+     * 访问地址：http://localhost:8080/aiChatAll/stream
      */
     @PostMapping(value = "/stream")
     public ResponseEntity<Flux<String>> streamData(@RequestBody AiModelQuestion req) {
+        // 向模型提问获取回答
         String answer = ollamaChatModel.chat(req.getQuestion());
+        // 使用正则表达式一次性移除 <think> 和 </think> 标签
+        answer = answer.replaceAll("</?think>", "");
 
+        //打印answer
         log.info("jsonString:{}",answer);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_NDJSON)
                 .body(Flux.just(answer));
